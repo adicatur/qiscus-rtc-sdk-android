@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">qiscus-rtc</string>
+    <string name="loading">loading..</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="time_zero">00:00</string>
+    <string name="on_going_call_notif">You have an ongoing call</string>
+    <string name="calling_state">Calling</string>
+    <string name="incoming_state">Incoming Call</string>
+    <string name="ringing_state">Ringing</string>
+    <string name="connecting_state">Connecting</string>
+</resources>

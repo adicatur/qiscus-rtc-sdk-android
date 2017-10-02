@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="call_bg_default">#0B2138</color>
+    <color name="call_bg_gradient_default">#DD0B2138</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_white">#F6F6F6</color>
+</resources>
