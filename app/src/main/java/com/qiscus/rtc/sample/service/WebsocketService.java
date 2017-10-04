@@ -131,29 +131,57 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
         serviceListener = listener;
     }
 
+    public synchronized boolean isConnected() {
+        return websocketClient != null && websocketClient.isConnected();
+    }
+
     @Override
     public void onConnect() {
-
+        Log.d("Sample PN", "Connected to websocket server");
     }
 
     @Override
     public void onMessage(String s) {
+        PowerManager.WakeLock wakelock = ((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EECS780 Service");
+        wakelock.acquire();
 
+        Log.d("Sample PN", "Received message: " + s);
+
+        if () {
+
+        } else {
+            wakelock.release();
+            return;
+        }
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                //
+            }
+        });
+        wakelock.release();
     }
 
     @Override
     public void onMessage(byte[] bytes) {
-
+        //
     }
 
     @Override
     public void onDisconnect(int i, String s) {
-
+        Log.d("Sample PN", String.format("Disconnected from websocket service. Code: %d, reason: %s", i, s));
+        if (!disconnect) {
+            startService(startIntent(this));
+        } else{
+            stopSelf();
+        }
     }
 
     @Override
     public void onError(Exception e) {
-
+        Log.e("Sample PN", "Error occured: ", e);
+        startService(startIntent(this));
     }
 
     public interface ServiceListener{
