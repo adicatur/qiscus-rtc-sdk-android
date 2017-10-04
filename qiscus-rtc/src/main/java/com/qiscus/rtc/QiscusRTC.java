@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.qiscus.rtc.data.config.CallConfig;
 import com.qiscus.rtc.data.local.LocalDataManager;
@@ -167,7 +166,6 @@ public class QiscusRTC {
             return this;
         }
 
-
         /**
          * Set the setCallerAvatar of call activity.
          *
@@ -222,7 +220,6 @@ public class QiscusRTC {
             callData.setCalleeDisplayName(calleeDisplayName);
             callData.setCalleeAvatar(calleeDisplayAvatar);
 
-            Log.d(TAG, "show callSession: "+ LocalDataManager.getInstance().getCallSessions());
             if (!LocalDataManager.getInstance().isContainCallSession(roomCallId)) {
                 LocalDataManager.getInstance().addCallSession(roomCallId);
                 Intent intent = new Intent(QiscusCallActivity.generateIntent(context, callData));
@@ -231,7 +228,6 @@ public class QiscusRTC {
             }
 
             return this;
-
         }
     }
 
