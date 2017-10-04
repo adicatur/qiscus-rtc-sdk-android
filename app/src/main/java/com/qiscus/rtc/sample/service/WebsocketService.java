@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -13,6 +12,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.fitraditya.androidwebsocket.WebsocketClient;
+import com.qiscus.rtc.QiscusRTC;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -27,10 +30,9 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
     public static final String ACTION_DISCONNECT = "PN.ACTION_DISCONNECT";
 
     private final IBinder iBinder = new Binder();
-    private WebsocketClient websocketClient;
+    private static WebsocketClient websocketClient;
     private ServiceListener serviceListener;
     private Handler handler;
-    private HashSet<String> list = new HashSet<String>();
     private boolean disconnect = false;
 
     public static Intent startIntent(Context context){
@@ -88,7 +90,7 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
         disconnect = false;
         if (websocketClient == null) {
             PowerManager.WakeLock clientlock = ((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EECS780");
-            websocketClient = new WebsocketClient(URI.create("wss://rtc.qiscus.com/pn"), this, null, clientlock);
+            websocketClient = new WebsocketClient(URI.create("wss://rtc.qiscus.com/signal/pn"), this, null, clientlock);
         }
 
         if (!websocketClient.isConnected()) {
@@ -122,7 +124,7 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
     }
 
     public class Binder extends android.os.Binder{
-        WebsocketService getService() {
+        public WebsocketService getService() {
             return WebsocketService.this;
         }
     }
@@ -138,6 +140,22 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
     @Override
     public void onConnect() {
         Log.d("Sample PN", "Connected to websocket server");
+
+        JSONObject data = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            data.put("username", QiscusRTC.getUser());
+            data.put("force", true);
+            jsonObject.put("request", "register");
+            jsonObject.put("data", data.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //if (websocketClient.isConnected()) {
+            websocketClient.send(jsonObject.toString());
+        //}
     }
 
     @Override
@@ -147,19 +165,44 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
 
         Log.d("Sample PN", "Received message: " + s);
 
-        if () {
+        try {
+            JSONObject jsonObject = new JSONObject(s);
 
-        } else {
-            wakelock.release();
-            return;
+            if (jsonObject.has("event")) {
+                String event = jsonObject.getString("event");
+                String data = jsonObject.getString("data");
+
+                JSONObject dataObject = new JSONObject(data);
+
+                if (event.equals("call_syn")) {
+                    String roomId = dataObject.getString("roomId");
+                    boolean video = dataObject.getBoolean("video");
+                    String callerName = dataObject.getString("callerName");
+                    String callerAvatar = dataObject.getString("callerAvatar");
+
+                    QiscusRTC.buildCallWith(roomId)
+                            .setCallAs(QiscusRTC.CallAs.CALLEE)
+                            .setCallType(video ? QiscusRTC.CallType.VIDEO : QiscusRTC.CallType.VOICE)
+                            .setUniqeIdCallee(callerName)
+                            .setUniqeIdCaller(QiscusRTC.getUser())
+                            .setCallerDisplayName(callerName)
+                            .setCallerDisplayAvatar(callerAvatar)
+                            .show(this);
+
+                    /*
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //
+                        }
+                    }, 3000);
+                    */
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                //
-            }
-        });
         wakelock.release();
     }
 
@@ -186,5 +229,26 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
 
     public interface ServiceListener{
         public void newResponse(String response);
+    }
+
+    public static void initCall(String roomId, QiscusRTC.CallType callType, String targetUser, String callerName, String callerAvatar) {
+        JSONObject data = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            data.put("roomId", roomId);
+            data.put("video", callType == QiscusRTC.CallType.VIDEO);
+            data.put("callerName", callerName);
+            data.put("callerAvatar", callerAvatar);
+            jsonObject.put("request", "call_syn");
+            jsonObject.put("recipient", targetUser);
+            jsonObject.put("data", data.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (websocketClient.isConnected()) {
+            websocketClient.send(jsonObject.toString());
+        }
     }
 }

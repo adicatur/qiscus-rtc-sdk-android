@@ -1,6 +1,10 @@
 package com.qiscus.rtc.sample;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +14,25 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.qiscus.rtc.QiscusRTC;
+import com.qiscus.rtc.data.model.QiscusRTCCall;
+import com.qiscus.rtc.sample.service.WebsocketService;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private WebsocketService websocketService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            websocketService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            websocketService = ((WebsocketService.Binder)service).getService();
+            websocketService.onStartCommand(null, 0, 0);
+        }
+    };
+
     private EditText etTargetUsername;
     private EditText etRoomId;
     private Button btnStartCall;
@@ -22,13 +42,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initView();
-
         if (!QiscusRTC.hasSession()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
+
+        bindService(WebsocketService.startIntent(getApplicationContext()), serviceConnection, Context.BIND_IMPORTANT);
+        getApplicationContext().startService(WebsocketService.startIntent(getApplicationContext()));
+        initView();
     }
 
     private void initView() {
@@ -39,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!etTargetUsername.getText().toString().isEmpty() && !etRoomId.getText().toString().isEmpty()) {
+                    WebsocketService.initCall(etRoomId.getText().toString(), QiscusRTC.CallType.VOICE, etTargetUsername.getText().toString(), QiscusRTC.getUser(), "http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg");
+
                     QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VOICE)
