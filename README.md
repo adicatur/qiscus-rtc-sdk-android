@@ -41,7 +41,7 @@ Add to your project AndroidManifest.xml
 
 # Authentication
 
-### Init with Your API Key
+### Init Qiscus
 
 Init Qiscus at your application
 
