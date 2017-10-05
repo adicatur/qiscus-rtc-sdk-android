@@ -72,7 +72,7 @@ QiscusRTC.register(txtUsername.getText().toString(), txtUsername.getText().toStr
 QiscusRTC.setSession();
 ```
 
-Stream object:
+Start call object:
 * roomId: String
 * callAs: Enum QiscusRTC.CallAs.CALLER / QiscusRTC.CallAs.CALLEE
 * callType: Enum QiscusRTC.CallType.VOICE / QiscusRTC.CallType.VIDEO
@@ -100,7 +100,7 @@ QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
 
 ### Custom your call
 
-You can custom your call notification, icon and callback button action.
+You can custom your call notification, icon and callback button action with ```QiscusRTC.Call.getCallConfig()```
 
 ```java
 QiscusRTC.Call.getCallConfig()
