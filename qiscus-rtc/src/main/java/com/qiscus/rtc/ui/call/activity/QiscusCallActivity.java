@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -205,13 +206,17 @@ public class QiscusCallActivity extends BaseActivity implements CallingFragment.
 
     private void startVideoCall() {
         initCallingFragment();
-        rtcClient.start(callData.getCallerUsername(), callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, callData.getTargetUser());
+        String id = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCallerUsername() : callData.getCalleeUsername();
+        String target = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCalleeUsername() : callData.getCallerUsername();
+        rtcClient.start(id, callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, target);
     }
 
     private void startVoiceCall() {
         initCallingFragment();
+        String id = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCallerUsername() : callData.getCalleeUsername();
+        String target = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCalleeUsername() : callData.getCallerUsername();
         rtcClient.setVideoEnabled(false);
-        rtcClient.start(callData.getCallerUsername(), callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, callData.getTargetUser());
+        rtcClient.start(id, callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, target);
     }
 
     private void initCallingFragment() {

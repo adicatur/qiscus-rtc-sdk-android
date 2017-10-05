@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
                     QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VOICE)
-                            .setUniqeIdCallee(etTargetUsername.getText().toString())
-                            .setUniqeIdCaller(QiscusRTC.getUser())
+                            .setCallerUsername(QiscusRTC.getUser())
+                            .setCalleeUsername(etTargetUsername.getText().toString())
                             .setCalleeDisplayName(etTargetUsername.getText().toString())
                             .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
                             .show(MainActivity.this);

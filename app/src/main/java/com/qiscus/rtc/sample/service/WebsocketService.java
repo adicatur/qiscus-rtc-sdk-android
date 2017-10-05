@@ -183,8 +183,8 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
                     QiscusRTC.buildCallWith(roomId)
                             .setCallAs(QiscusRTC.CallAs.CALLEE)
                             .setCallType(video ? QiscusRTC.CallType.VIDEO : QiscusRTC.CallType.VOICE)
-                            .setUniqeIdCallee(callerName)
-                            .setUniqeIdCaller(QiscusRTC.getUser())
+                            .setCalleeUsername(QiscusRTC.getUser())
+                            .setCallerUsername(callerName)
                             .setCallerDisplayName(callerName)
                             .setCallerDisplayAvatar(callerAvatar)
                             .show(this);
