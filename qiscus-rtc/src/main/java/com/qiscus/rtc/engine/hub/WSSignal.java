@@ -1,5 +1,6 @@
 package com.qiscus.rtc.engine.hub;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.qiscus.rtc.engine.util.LooperExecutor;
@@ -163,7 +164,13 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                         if (parameters.initiator) {
                             channel.createRoom(parameters.roomId);
                         } else {
-                            channel.joinRoom(parameters.roomId);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    channel.joinRoom(parameters.roomId);
+                                }
+                            }, 1000);
                         }
                     } else {
                         String message = data.getString("message");
