@@ -76,9 +76,11 @@ public class QiscusCallFragment extends Fragment implements HubListener, QiscusR
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_base_call, container, false);
-        callData = getArguments().getParcelable(CALL_DATA);
         initView(view);
-        rtcClient.start(callData.getCallerDisplayName(), callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, callData.getTargetUser());
+        callData = getArguments().getParcelable(CALL_DATA);
+        String id = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCallerUsername() : callData.getCalleeUsername();
+        String target = callData.getCallAs() == QiscusRTC.CallAs.CALLER ? callData.getCalleeUsername() : callData.getCallerUsername();
+        rtcClient.start(id, callData.getRoomId(), callData.getCallAs() == QiscusRTC.CallAs.CALLER, callData.getCallType() == QiscusRTC.CallType.VIDEO, target);
         return view;
     }
 

@@ -13,13 +13,12 @@ public class QiscusRTCCall implements Parcelable {
     private QiscusRTC.CallAs callAs = QiscusRTC.CallAs.CALLER;
     private QiscusRTC.CallType callType = QiscusRTC.CallType.VIDEO;
     private String roomId;
+    private String callerUsername;
     private String callerDisplayName;
     private String callerAvatar;
     private String calleeUsername;
-    private String callerUsername;
     private String calleeDisplayName;
     private String calleeAvatar;
-    private String targetUser;
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
@@ -27,6 +26,14 @@ public class QiscusRTCCall implements Parcelable {
 
     public String getRoomId() {
         return roomId;
+    }
+
+    public void setCallerUsername(String callerUsername) {
+        this.callerUsername = callerUsername;
+    }
+
+    public String getCallerUsername() {
+        return callerUsername;
     }
 
     public void setCallerDisplayName(String callerDisplayName) {
@@ -57,14 +64,6 @@ public class QiscusRTCCall implements Parcelable {
         this.calleeDisplayName = calleeDisplayName;
     }
 
-    public String getCallerUsername() {
-        return callerUsername;
-    }
-
-    public void setCallerUsername(String callerUsername) {
-        this.callerUsername = callerUsername;
-    }
-
     public String getCalleeDisplayName() {
         return calleeDisplayName;
     }
@@ -77,28 +76,20 @@ public class QiscusRTCCall implements Parcelable {
         return calleeAvatar;
     }
 
-    public QiscusRTC.CallAs getCallAs() {
-        return callAs;
-    }
-
-    public QiscusRTC.CallType getCallType() {
-        return callType;
-    }
-
     public void setCallAs(QiscusRTC.CallAs callAs) {
         this.callAs = callAs;
+    }
+
+    public QiscusRTC.CallAs getCallAs() {
+        return callAs;
     }
 
     public void setCallType(QiscusRTC.CallType callType) {
         this.callType = callType;
     }
 
-    public String getTargetUser() {
-        return targetUser;
-    }
-
-    public void setTargetUser(String targetUser) {
-        this.targetUser = targetUser;
+    public QiscusRTC.CallType getCallType() {
+        return callType;
     }
 
     public QiscusRTCCall() {
@@ -115,13 +106,12 @@ public class QiscusRTCCall implements Parcelable {
         dest.writeInt(this.callAs == null ? -1 : this.callAs.ordinal());
         dest.writeInt(this.callType == null ? -1 : this.callType.ordinal());
         dest.writeString(this.roomId);
+        dest.writeString(this.callerUsername);
         dest.writeString(this.callerDisplayName);
         dest.writeString(this.callerAvatar);
         dest.writeString(this.calleeUsername);
-        dest.writeString(this.callerUsername);
         dest.writeString(this.calleeDisplayName);
         dest.writeString(this.calleeAvatar);
-        dest.writeString(this.targetUser);
     }
 
     protected QiscusRTCCall(Parcel in) {
@@ -130,13 +120,12 @@ public class QiscusRTCCall implements Parcelable {
         int tmpCallType = in.readInt();
         this.callType = tmpCallType == -1 ? null : QiscusRTC.CallType.values()[tmpCallType];
         this.roomId = in.readString();
+        this.callerUsername = in.readString();
         this.callerDisplayName = in.readString();
         this.callerAvatar = in.readString();
         this.calleeUsername = in.readString();
-        this.callerUsername = in.readString();
         this.calleeDisplayName = in.readString();
         this.calleeAvatar = in.readString();
-        this.targetUser = in.readString();
     }
 
     public static final Creator<QiscusRTCCall> CREATOR = new Creator<QiscusRTCCall>() {
@@ -163,7 +152,6 @@ public class QiscusRTCCall implements Parcelable {
                 ", callerUsername='" + callerUsername + '\'' +
                 ", calleeDisplayName='" + calleeDisplayName + '\'' +
                 ", calleeAvatar='" + calleeAvatar + '\'' +
-                ", targetUser='" + targetUser + '\'' +
                 '}';
     }
 }

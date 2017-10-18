@@ -3,25 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="25dp"
     android:orientation="vertical"
-    tools:context="com.qiscus.rtc.sample.MainActivity">
+    tools:context="com.qiscus.rtc.sample.LoginActivity">
 
     <EditText
-        android:id="@+id/target_username"
-        android:hint="Call Target"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/room_id"
-        android:hint="Call Room"
+        android:id="@+id/txtUsername"
+        android:hint="Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btn_call"
-        android:text="Start Call"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Register" />
 </LinearLayout>

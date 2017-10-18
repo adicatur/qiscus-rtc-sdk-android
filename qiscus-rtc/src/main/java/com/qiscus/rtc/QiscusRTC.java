@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.qiscus.rtc.data.config.CallConfig;
 import com.qiscus.rtc.data.local.LocalDataManager;
@@ -61,50 +60,38 @@ public class QiscusRTC {
     }
 
     public interface RequiredCallAs {
-        RequiredCallType setCallType(QiscusRTC.CallType callType);
-    }
-
-    public interface RequiredCallType {
-        RequiredUniqeIdCallee setUniqeIdCallee(String uniqueIdCallee);
-    }
-
-    public interface RequiredUniqeIdCallee {
-        OptionalMethod setCalleeDisplayName(String calleeDisplayName);
-        OptionalMethod setCalleeDisplayAvatar(String calleeDisplayAvatar);
-        OptionalMethod setCallerDisplayName(String callerDisplayName);
-        OptionalMethod setCallerDisplayAvatar(String callerDisplayAvatar);
-        OptionalMethod setUniqeIdCaller(String uniqueIdCaller);
-        QiscusRTC show(Context context);
+        OptionalMethod setCallType(QiscusRTC.CallType callType);
     }
 
     public interface OptionalMethod {
-        OptionalMethod setCalleeDisplayName(String calleeDisplayName);
-        OptionalMethod setCalleeDisplayAvatar(String calleeDisplayAvatar);
+        OptionalMethod setCallerUsername(String callerUsername);
         OptionalMethod setCallerDisplayName(String callerDisplayName);
         OptionalMethod setCallerDisplayAvatar(String callerDisplayAvatar);
-        OptionalMethod setUniqeIdCaller(String uniqueIdCaller);
+        OptionalMethod setCalleeUsername(String calleeUsername);
+        OptionalMethod setCalleeDisplayName(String calleeDisplayName);
+        OptionalMethod setCalleeDisplayAvatar(String calleeDisplayAvatar);
         QiscusRTC show(Context context);
     }
 
-    public static class CallActivityBuilder extends QiscusRTC implements RequiredRoomId, RequiredCallAs, RequiredCallType, RequiredUniqeIdCallee,
-            OptionalMethod {
+    public static class CallActivityBuilder extends QiscusRTC implements RequiredRoomId, RequiredCallAs, OptionalMethod {
         private String roomCallId;
         private QiscusRTC.CallAs callAs;
+        private QiscusRTC.CallType callType;
+        private String callerUsername;
         private String callerDisplayName;
         private String callerDisplayAvatar;
-        private QiscusRTC.CallType callType;
+        private String calleeUsername;
         private String calleeDisplayName;
         private String calleeDisplayAvatar;
-        private String uniqueIdCaller;
-        private String uniqueIdCallee;
 
         private CallActivityBuilder(String roomCallId) {
             this.roomCallId = roomCallId;
-            this.callerDisplayAvatar = "";
+            this.callerUsername = "";
             this.callerDisplayName = "";
+            this.callerDisplayAvatar = "";
+            this.calleeUsername = "";
+            this.calleeDisplayName = "";
             this.calleeDisplayAvatar = "";
-            this.calleeDisplayName="";
-            this.uniqueIdCaller="";
         }
 
         /**
@@ -126,32 +113,20 @@ public class QiscusRTC {
          * @return builder
          */
         @Override
-        public RequiredCallType setCallType(CallType callType) {
+        public OptionalMethod setCallType(CallType callType) {
             this.callType = callType;
             return this;
         }
 
         /**
-         * Set the setUniqeIdCaller of call activity.
+         * Set the setCallerUsername of call activity.
          *
-         * uniqueIdCaller is email or number phone from callee.
+         * @param callerUsername is email or number phone from caller.
          * @return builder
          */
         @Override
-        public OptionalMethod setUniqeIdCaller(String uniqueIdCaller) {
-            this.uniqueIdCaller = uniqueIdCaller;
-            return this;
-        }
-
-        /**
-         * Set the uniqeId of call activity. Default id "Call"
-         *
-         * @param uniqueIdCallee is email or number phone from caller (optional)
-         * @return builder
-         */
-        @Override
-        public RequiredUniqeIdCallee setUniqeIdCallee(String uniqueIdCallee) {
-            this.uniqueIdCallee = uniqueIdCallee;
+        public OptionalMethod setCallerUsername(String callerUsername) {
+            this.callerUsername = callerUsername;
             return this;
         }
 
@@ -167,7 +142,6 @@ public class QiscusRTC {
             return this;
         }
 
-
         /**
          * Set the setCallerAvatar of call activity.
          *
@@ -181,14 +155,14 @@ public class QiscusRTC {
         }
 
         /**
-         * Set the setCalleeAvatar of call activity.
+         * Set the setCalleeUsername of call activity.
          *
-         * @param calleeDisplayAvatar display avatar callee in call screen
+         * @param calleeUsername is email or number phone from callee.
          * @return builder
          */
         @Override
-        public OptionalMethod setCalleeDisplayAvatar(String calleeDisplayAvatar) {
-            this.calleeDisplayAvatar = calleeDisplayAvatar;
+        public OptionalMethod setCalleeUsername(String calleeUsername) {
+            this.calleeUsername = calleeUsername;
             return this;
         }
 
@@ -205,6 +179,18 @@ public class QiscusRTC {
         }
 
         /**
+         * Set the setCalleeAvatar of call activity.
+         *
+         * @param calleeDisplayAvatar display avatar callee in call screen
+         * @return builder
+         */
+        @Override
+        public OptionalMethod setCalleeDisplayAvatar(String calleeDisplayAvatar) {
+            this.calleeDisplayAvatar = calleeDisplayAvatar;
+            return this;
+        }
+
+        /**
          * show the Call activity intent
          *
          * @param context  Context for start the Activity
@@ -215,14 +201,13 @@ public class QiscusRTC {
             callData.setRoomId(roomCallId);
             callData.setCallAs(callAs);
             callData.setCallType(callType);
-            callData.setTargetUser(uniqueIdCallee);
+            callData.setCallerUsername(callerUsername);
             callData.setCallerDisplayName(callerDisplayName);
             callData.setCallerAvatar(callerDisplayAvatar);
-            callData.setCallerUsername(uniqueIdCaller);
+            callData.setCalleeUsername(calleeUsername);
             callData.setCalleeDisplayName(calleeDisplayName);
             callData.setCalleeAvatar(calleeDisplayAvatar);
 
-            Log.d(TAG, "show callSession: "+ LocalDataManager.getInstance().getCallSessions());
             if (!LocalDataManager.getInstance().isContainCallSession(roomCallId)) {
                 LocalDataManager.getInstance().addCallSession(roomCallId);
                 Intent intent = new Intent(QiscusCallActivity.generateIntent(context, callData));
@@ -231,7 +216,6 @@ public class QiscusRTC {
             }
 
             return this;
-
         }
     }
 

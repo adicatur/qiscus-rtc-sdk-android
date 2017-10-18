@@ -53,7 +53,7 @@ public class RingManager {
                         vibrate();
                         phoneRingPlayer.start();
                     } catch (Throwable t) {
-                        Log.d("RingtoneManager", "Failed to start playing ring tone", t);
+                        Log.e("RingtoneManager", "Failed to start playing ring tone");
                     }
 
                     break;
@@ -79,12 +79,11 @@ public class RingManager {
                     try {
                         phoneRingPlayer.start();
                     } catch (Throwable t) {
-                        Log.d("RingtoneManager", "Failed to start playing ring tone", t);
+                        Log.e("RingtoneManager", "Failed to start playing ring tone");
                     }
 
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    Log.d("RingtoneManager", "Vibrate.......");
                     vibrate();
             }
         }
@@ -95,7 +94,6 @@ public class RingManager {
     }
 
     public synchronized void stop() {
-        Log.d("amsibsam", "ring stop");
         if (phoneRingPlayer != null) {
             if (phoneRingPlayer.isPlaying()) {
                 phoneRingPlayer.stop();
