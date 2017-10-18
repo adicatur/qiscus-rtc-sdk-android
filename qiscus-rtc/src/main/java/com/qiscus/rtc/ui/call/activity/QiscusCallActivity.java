@@ -362,6 +362,27 @@ public class QiscusCallActivity extends BaseActivity implements CallingFragment.
     }
 
     @Override
+    public void onConnectingState(int state) {
+        String dot = "";
+
+        if (state == 1) {
+            dot = ".";
+        } else if (state == 2) {
+            dot = "..";
+        } else if (state == 3) {
+            dot = "...";
+        }
+
+        final String finalDot = dot;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                callingFragment.setTvCallState("Connecting" + finalDot);
+            }
+        });
+    }
+
+    @Override
     public void onUpdateVideoView(final Boolean iceConnected, final QiscusRTCRendererCommon.ScalingType scalingType) {
         QiscusRTC.Call.getInstance().setCallAccepted(true);
         runOnUiThread(new Runnable() {

@@ -151,17 +151,20 @@ public class QiscusRTCClient implements HubSignal.SignalEvents, PCClient.PeerCon
 
     @Override
     public void onSDPOffer(SessionDescription sdp) {
+        rtcListener.onConnectingState(1);
         pcClient.setRemoteDescription(sdp);
         pcClient.createAnswer();
     }
 
     @Override
     public void onSDPAnswer(SessionDescription sdp) {
+        rtcListener.onConnectingState(2);
         pcClient.setRemoteDescription(sdp);
     }
 
     @Override
     public void onICECandidate(IceCandidate candidate) {
+        rtcListener.onConnectingState(2);
         pcClient.setRemoteCandidate(candidate);
     }
 
@@ -177,17 +180,20 @@ public class QiscusRTCClient implements HubSignal.SignalEvents, PCClient.PeerCon
 
     @Override
     public void onOfferLocalDescription(SessionDescription sdp) {
+        rtcListener.onConnectingState(1);
         hubSignal.sendOffer(sdp);
     }
 
 
     @Override
     public void onAnswerLocalDescription(SessionDescription sdp) {
+        rtcListener.onConnectingState(2);
         hubSignal.sendAnswer(sdp);
     }
 
     @Override
     public void onIceCandidate(IceCandidate candidate) {
+        rtcListener.onConnectingState(3);
         hubSignal.trickleCandidate(candidate);
     }
 
