@@ -158,13 +158,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
-
-                        executor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                channel.close();
-                            }
-                        });
+                        events.onClose();
                     }
                 } else if (response.equals("room_create") || response.equals("room_join")) {
                     boolean success = data.getBoolean("success");
@@ -175,13 +169,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
-
-                        executor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                channel.close();
-                            }
-                        });
+                        events.onClose();
                     }
                 }
             } else if (object.has("event")) {
