@@ -36,15 +36,15 @@ public class QiscusRTCSession {
     }
 
     public String getName() {
-        return sharedPreferences.getString("username", "Anonymous");
+        return sharedPreferences.getString("username", "");
     }
 
     public String getDisplayName() {
-        return sharedPreferences.getString("displayname", "Anonymous");
+        return sharedPreferences.getString("displayname", "");
     }
 
     public String getAvatarUrl() {
-        return sharedPreferences.getString("avatarurl", "Anonymous");
+        return sharedPreferences.getString("avatarurl", "");
     }
 
     public void logout() {
