@@ -62,6 +62,16 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
     }
 
     @Override
+    public void endCall() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                channel.endCall();
+            }
+        });
+    }
+
+    @Override
     public void onWebsocketOpen() {
         executor.execute(new Runnable() {
             @Override
@@ -184,7 +194,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     }
                 } else if (event.equals("user_leave")) {
                     if (sender.equals(parameters.target)) {
-                        close();
+                        events.onClose();
                     }
                 } else if (event.equals("room_data_private")) {
                     if (data.has("event")) {

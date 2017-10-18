@@ -319,6 +319,7 @@ public class QiscusCallActivity extends BaseActivity implements CallingFragment.
         if (QiscusRTC.Call.getCallConfig().getOnEndCallClickListener() != null) {
             QiscusRTC.Call.getCallConfig().getOnEndCallClickListener().onClick(callData, calldurationMillis);
         }
+        rtcClient.endCall();
         disconnect();
     }
 

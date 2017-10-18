@@ -123,6 +123,10 @@ public class QiscusRTCClient implements HubSignal.SignalEvents, PCClient.PeerCon
         }
     }
 
+    public void endCall() {
+        hubSignal.endCall();
+    }
+
     @Override
     public void onLoggedinToRoom() {
         hubSignal.ping();

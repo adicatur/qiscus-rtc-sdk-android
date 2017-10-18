@@ -23,7 +23,7 @@ allprojects {
 
 ```groovy
 dependencies {
-  compile 'com.github.qiscus:qiscus-rtc-sdk-android:0.1'
+  compile 'com.github.qiscus:qiscus-rtc-sdk-android:0.2'
 }
 ```
 
@@ -109,4 +109,4 @@ QiscusRTC.Call.getCallConfig()
                 .setLargeOngoingNotifIcon(R.drawable.ic_call_white_24dp);
 ```
 
-You just need 3 steps to build voice call in your apps.
+That's it! You just need 3 steps to build voice call in your apps.

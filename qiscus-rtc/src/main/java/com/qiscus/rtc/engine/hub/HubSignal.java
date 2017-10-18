@@ -40,6 +40,7 @@ public interface HubSignal {
     public void connect();
     public void acceptCall();
     public void rejectCall();
+    public void endCall();
     public void sendOffer(SessionDescription sdp);
     public void sendAnswer(SessionDescription sdp);
     public void trickleCandidate(IceCandidate candidate);
