@@ -58,7 +58,7 @@ public class SampleApplication extends Application {
 }
 ```
 
-### Register Users
+### Register User
 
 Before user can start call each other, they must register the user to our server
 
@@ -110,3 +110,8 @@ QiscusRTC.Call.getCallConfig()
 ```
 
 That's it! You just need 3 steps to build voice call in your apps.
+
+### Example
+
+- [Basic example](https://github.com/qiscus/qiscus-rtc-sdk-android/blob/master/app/src/main/java/com/qiscus/rtc/sample/MainActivity.java)
+
