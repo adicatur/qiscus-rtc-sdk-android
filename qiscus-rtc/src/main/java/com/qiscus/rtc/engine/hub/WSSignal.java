@@ -158,6 +158,13 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
+
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.close();
+                            }
+                        });
                     }
                 } else if (response.equals("room_create") || response.equals("room_join")) {
                     boolean success = data.getBoolean("success");
@@ -168,6 +175,13 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
+
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.close();
+                            }
+                        });
                     }
                 }
             } else if (object.has("event")) {
@@ -226,6 +240,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
 
     @Override
     public void onWebsocketClose() {
+        channel.state = WSChannel.WSState.CLOSED;
         events.onClose();
     }
 
