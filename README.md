@@ -83,10 +83,9 @@ Start call object:
 
 ### Start Call
 
-Start voice call
+####Start voice call
 
 ```java
-WebsocketService.initCall(etRoomId.getText().toString(), QiscusRTC.CallType.VOICE, etTargetUsername.getText().toString(), QiscusRTC.getUser(), "http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg");
 QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VOICE)
@@ -96,7 +95,18 @@ QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
                             .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
                             .show(this);
 ```
+####Start video call
 
+```java
+QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
+                            .setCallAs(QiscusRTC.CallAs.CALLER)
+                            .setCallType(QiscusRTC.CallType.VIDEO)
+                            .setCallerUsername(QiscusRTC.getUser())
+                            .setCalleeUsername(etTargetUsername.getText().toString())
+                            .setCalleeDisplayName(etTargetUsername.getText().toString())
+                            .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
+                            .show(this);
+```
 
 ### Custom your call
 
@@ -114,4 +124,3 @@ That's it! You just need 3 steps to build voice call in your apps.
 ### Example
 
 - [Basic example](https://github.com/qiscus/qiscus-rtc-sdk-android/blob/master/app/src/main/java/com/qiscus/rtc/sample/MainActivity.java)
-
