@@ -1,5 +1,6 @@
 package com.qiscus.rtc.engine.hub;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.qiscus.rtc.engine.util.LooperExecutor;
@@ -57,6 +58,16 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
             @Override
             public void run() {
                 channel.rejectCall();
+            }
+        });
+    }
+
+    @Override
+    public void endCall() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                channel.endCall();
             }
         });
     }
@@ -153,11 +164,18 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                         if (parameters.initiator) {
                             channel.createRoom(parameters.roomId);
                         } else {
-                            channel.joinRoom(parameters.roomId);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    channel.joinRoom(parameters.roomId);
+                                }
+                            }, 1000);
                         }
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
+                        events.onClose();
                     }
                 } else if (response.equals("room_create") || response.equals("room_join")) {
                     boolean success = data.getBoolean("success");
@@ -168,6 +186,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     } else {
                         String message = data.getString("message");
                         Log.e(TAG, message);
+                        events.onClose();
                     }
                 }
             } else if (object.has("event")) {
@@ -182,7 +201,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
                     }
                 } else if (event.equals("user_leave")) {
                     if (sender.equals(parameters.target)) {
-                        close();
+                        events.onClose();
                     }
                 } else if (event.equals("room_data_private")) {
                     if (data.has("event")) {
@@ -226,6 +245,7 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
 
     @Override
     public void onWebsocketClose() {
+        channel.state = WSChannel.WSState.CLOSED;
         events.onClose();
     }
 

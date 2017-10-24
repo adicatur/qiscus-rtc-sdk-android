@@ -333,6 +333,25 @@ public class WSChannel {
         }
     }
 
+    public void endCall() {
+        if (state != WSState.LOGGEDIN) {
+            Log.e(TAG, "Hub end call in state " + state);
+            return;
+        }
+
+        try {
+            JSONObject object = new JSONObject();
+            object.put("request", "room_leave");
+            object.put("room", room_id);
+
+            Log.d(TAG, "C->WSS: " + object.toString());
+
+            websocket.send(object.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "Hub end call error: " + e.getMessage());
+        }
+    }
+
     public void ping() {
         executor.execute(new Runnable() {
             @Override

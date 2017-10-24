@@ -176,6 +176,11 @@ public class QiscusCallFragment extends Fragment implements HubListener, QiscusR
     }
 
     @Override
+    public void onConnectingState(int state) {
+        //
+    }
+
+    @Override
     public void onUpdateVideoView(final Boolean iceConnected, final QiscusRTCRendererCommon.ScalingType scalingType) {
         callStateListener.onCallConnected();
         getActivity().runOnUiThread(new Runnable() {

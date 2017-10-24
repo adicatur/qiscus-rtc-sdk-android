@@ -7,6 +7,7 @@ import org.webrtc.RendererCommon;
  */
 
 public interface QiscusRTCListener {
+    public void onConnectingState(int state);
     public void onUpdateVideoView(Boolean iceConnected, RendererCommon.ScalingType scalingType);
     public void onPeerDown();
     public void onPeerError();
