@@ -20,8 +20,13 @@
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/btn_call"
-        android:text="Start Call"
+        android:id="@+id/btn_voice_call"
+        android:text="Start Voice Call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_video_call"
+        android:text="Start Video Call"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

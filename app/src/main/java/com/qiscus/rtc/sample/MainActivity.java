@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etTargetUsername;
     private EditText etRoomId;
-    private Button btnStartCall;
+    private Button btnVoiceCall;
+    private Button btnVideoCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         etTargetUsername = (EditText) findViewById(R.id.target_username);
         etRoomId = (EditText) findViewById(R.id.room_id);
-        btnStartCall = (Button) findViewById(R.id.btn_call);
-        btnStartCall.setOnClickListener(new View.OnClickListener() {
+        btnVoiceCall = (Button) findViewById(R.id.btn_voice_call);
+        btnVoiceCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!etTargetUsername.getText().toString().isEmpty() && !etRoomId.getText().toString().isEmpty()) {
@@ -66,6 +67,26 @@ public class MainActivity extends AppCompatActivity {
                     QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VOICE)
+                            .setCallerUsername(QiscusRTC.getUser())
+                            .setCalleeUsername(etTargetUsername.getText().toString())
+                            .setCalleeDisplayName(etTargetUsername.getText().toString())
+                            .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
+                            .show(MainActivity.this);
+                } else {
+                    Toast.makeText(MainActivity.this, "Target user and room id required", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        btnVideoCall = (Button) findViewById(R.id.btn_video_call);
+        btnVideoCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!etTargetUsername.getText().toString().isEmpty() && !etRoomId.getText().toString().isEmpty()) {
+                    WebsocketService.initCall(etRoomId.getText().toString(), QiscusRTC.CallType.VIDEO, etTargetUsername.getText().toString(), QiscusRTC.getUser(), "http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg");
+
+                    QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
+                            .setCallAs(QiscusRTC.CallAs.CALLER)
+                            .setCallType(QiscusRTC.CallType.VIDEO)
                             .setCallerUsername(QiscusRTC.getUser())
                             .setCalleeUsername(etTargetUsername.getText().toString())
                             .setCalleeDisplayName(etTargetUsername.getText().toString())
