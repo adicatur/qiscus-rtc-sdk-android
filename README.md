@@ -23,7 +23,7 @@ allprojects {
 
 ```groovy
 dependencies {
-  compile 'com.github.qiscus:qiscus-rtc-sdk-android:0.2'
+  compile 'com.github.qiscus:qiscus-rtc-sdk-android:0.3'
 }
 ```
 
