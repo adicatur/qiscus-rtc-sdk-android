@@ -11,7 +11,7 @@
         android:scaleType="centerCrop"
         android:visibility="gone"/>
 
-    <com.qiscus.rtc.sdk.util.widget.RoundedImageView
+    <com.qiscus.rtc.ui.widget.RoundedImageView
         android:id="@+id/caller_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
