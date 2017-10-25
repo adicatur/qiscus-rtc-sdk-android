@@ -302,8 +302,7 @@ public class QiscusRTC {
         account.setAppId(appId);
         account.setAppSecret(appSecret);
         account.setDisplayName(displayName);
-
-        Log.d("SINI", "Ini " + " " + appId + " " + appSecret);
+        setSession();
     }
 
     /**
