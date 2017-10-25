@@ -25,8 +25,6 @@ public class QiscusRTCSession {
 
     public void register(QiscusRTCAccount user) {
         editor.putBoolean(KEY_ISREGISTERED, true);
-        editor.putString("appId", user.getAppId());
-        editor.putString("appSecret", user.getAppSecret());
         editor.putString("username", user.getUsername());
         editor.putString("displayname", user.getDisplayName());
         editor.putString("avatarurl", user.getAvatarUrl());
@@ -35,14 +33,6 @@ public class QiscusRTCSession {
 
     public boolean isRegistered() {
         return sharedPreferences.getBoolean(KEY_ISREGISTERED, false);
-    }
-
-    public String getAppId() {
-        return sharedPreferences.getString("appId", "");
-    }
-
-    public String getAppSecret() {
-        return sharedPreferences.getString("appSecret", "");
     }
 
     public String getName() {

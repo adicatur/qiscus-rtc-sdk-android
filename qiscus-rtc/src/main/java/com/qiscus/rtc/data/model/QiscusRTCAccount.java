@@ -5,8 +5,6 @@ package com.qiscus.rtc.data.model;
  */
 
 public class QiscusRTCAccount {
-    private String appId;
-    private String appSecret;
     private String username;
     private String displayName;
     private String avatarUrl;
@@ -14,22 +12,6 @@ public class QiscusRTCAccount {
     public QiscusRTCAccount(String username, String avatarUrl) {
         this.username = username;
         this.avatarUrl = avatarUrl;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getAppSecret() {
-        return appSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
     }
 
     public String getUsername() {

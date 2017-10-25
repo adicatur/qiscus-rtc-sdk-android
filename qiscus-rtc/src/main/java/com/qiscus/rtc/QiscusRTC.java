@@ -269,7 +269,7 @@ public class QiscusRTC {
      * @return String appId
      */
     public static String getAppId() {
-        return session.getAppId();
+        return appId;
     }
 
     /**
@@ -278,7 +278,7 @@ public class QiscusRTC {
      * @return String appSecret
      */
     public static String getAppSecret() {
-        return session.getAppSecret();
+        return appSecret;
     }
 
     /**
@@ -299,8 +299,6 @@ public class QiscusRTC {
      */
     public static void register(String username, String displayName, String avatarUrl) {
         account = new QiscusRTCAccount(username, avatarUrl);
-        account.setAppId(appId);
-        account.setAppSecret(appSecret);
         account.setDisplayName(displayName);
         setSession();
     }
