@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.qiscus.rtc.data.config.CallConfig;
 import com.qiscus.rtc.data.local.LocalDataManager;
@@ -40,6 +41,8 @@ public class QiscusRTC {
     private static QiscusRTCAccount account;
     private static QiscusRTCSession session;
     private static ScheduledThreadPoolExecutor taskExecutor;
+    private static String appId;
+    private static String appSecret;
 
     private QiscusRTC() {
         //
@@ -225,12 +228,14 @@ public class QiscusRTC {
      *
      * @param instance - Application instance
      */
-    public static void init(Application instance) {
+    public static void init(Application instance, String app_id, String app_secret) {
         appInstance = instance;
         applicationContext = appInstance.getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
         taskExecutor = new ScheduledThreadPoolExecutor(5);
         session = new QiscusRTCSession(applicationContext);
+        appId = app_id;
+        appSecret = app_secret;
     }
 
     /**
@@ -259,6 +264,24 @@ public class QiscusRTC {
     }
 
     /**
+     * Use this method to get application id
+     *
+     * @return String appId
+     */
+    public static String getAppId() {
+        return session.getAppId();
+    }
+
+    /**
+     * Use this method to get application secret
+     *
+     * @return String appSecret
+     */
+    public static String getAppSecret() {
+        return session.getAppSecret();
+    }
+
+    /**
      * Use this method to get user name
      *
      * @return String username
@@ -276,19 +299,11 @@ public class QiscusRTC {
      */
     public static void register(String username, String displayName, String avatarUrl) {
         account = new QiscusRTCAccount(username, avatarUrl);
-        account.setAvatarUrl(avatarUrl);
+        account.setAppId(appId);
+        account.setAppSecret(appSecret);
         account.setDisplayName(displayName);
 
-        JSONObject data = new JSONObject();
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            data.put("username", username);
-            jsonObject.put("request", "register");
-            jsonObject.put("data", data.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Log.d("SINI", "Ini " + " " + appId + " " + appSecret);
     }
 
     /**

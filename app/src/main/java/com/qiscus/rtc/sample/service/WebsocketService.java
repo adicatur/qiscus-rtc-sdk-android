@@ -90,7 +90,7 @@ public class WebsocketService extends Service implements WebsocketClient.Websock
         disconnect = false;
         if (websocketClient == null) {
             PowerManager.WakeLock clientlock = ((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EECS780");
-            websocketClient = new WebsocketClient(URI.create("wss://rtc.qiscus.com/signal/pn"), this, null, clientlock);
+            websocketClient = new WebsocketClient(URI.create("ws://192.168.43.63:8080/pn"), this, null, clientlock);
         }
 
         if (!websocketClient.isConnected()) {

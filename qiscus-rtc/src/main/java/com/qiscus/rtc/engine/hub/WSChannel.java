@@ -9,6 +9,7 @@ import com.koushikdutta.async.callback.DataCallback;
 import com.koushikdutta.async.callback.WritableCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
+import com.qiscus.rtc.QiscusRTC;
 import com.qiscus.rtc.engine.util.LooperExecutor;
 
 import org.json.JSONException;
@@ -32,7 +33,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class WSChannel {
     private static final String TAG = WSChannel.class.getSimpleName();
-    private static String SERVER = "wss://rtc.qiscus.com/signal";
+    private static String SERVER = "ws://192.168.43.63:8080/mobile";
 
     private final LooperExecutor executor;
     private final WSChannelEvents event;
@@ -181,6 +182,8 @@ public class WSChannel {
             JSONObject object = new JSONObject();
             JSONObject data = new JSONObject();
             object.put("request", "register");
+            data.put("app_id", QiscusRTC.getAppId());
+            data.put("app_secret", QiscusRTC.getAppSecret());
             data.put("username", client_id);
             object.put("data", data.toString());
 
@@ -192,7 +195,7 @@ public class WSChannel {
         }
     }
 
-    public void createRoom(String roomId) {
+    public void createRoom(String roomId, String token) {
         if (state != WSState.CONNECTED) {
             Log.e(TAG, "Hub create room in state " + state);
             return;
@@ -206,6 +209,7 @@ public class WSChannel {
             object.put("request", "room_create");
             object.put("room", room_id);
             data.put("max_participant", 2);
+            data.put("token", token);
             object.put("data", data.toString());
 
             Log.d(TAG, "C->WSS: " + object.toString());
@@ -216,7 +220,7 @@ public class WSChannel {
         }
     }
 
-    public void joinRoom(String roomId) {
+    public void joinRoom(String roomId, String token) {
         if (state != WSState.CONNECTED) {
             Log.e(TAG, "Hub join room in state " + state);
             return;
@@ -226,8 +230,11 @@ public class WSChannel {
 
         try {
             JSONObject object = new JSONObject();
+            JSONObject data = new JSONObject();
             object.put("request", "room_join");
             object.put("room", room_id);
+            data.put("token", token);
+            object.put("data", data.toString());
 
             Log.d(TAG, "C->WSS: " + object.toString());
 

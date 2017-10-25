@@ -159,16 +159,17 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
 
                 if (response.equals("register")) {
                     boolean success = data.getBoolean("success");
+                    final String token = data.getString("token");
 
                     if (success) {
                         if (parameters.initiator) {
-                            channel.createRoom(parameters.roomId);
+                            channel.createRoom(parameters.roomId, token);
                         } else {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    channel.joinRoom(parameters.roomId);
+                                    channel.joinRoom(parameters.roomId, token);
                                 }
                             }, 1000);
                         }
