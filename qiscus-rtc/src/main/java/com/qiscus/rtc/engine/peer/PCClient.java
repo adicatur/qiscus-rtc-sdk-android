@@ -606,6 +606,7 @@ public class PCClient {
     public static interface PeerConnectionEvents {
         public void onOfferLocalDescription(final SessionDescription sdp);
         public void onAnswerLocalDescription(final SessionDescription sdp);
+        public void onIceState(String state);
         public void onIceCandidate(final IceCandidate candidate);
         public void onIceConnected();
         public void onIceDisconnected();
@@ -643,6 +644,12 @@ public class PCClient {
                 @Override
                 public void run() {
                     Log.d(TAG, "IceConnection state: " + newState);
+
+                    if (newState == PeerConnection.IceConnectionState.NEW ||
+                            newState == PeerConnection.IceConnectionState.CONNECTED ||
+                            newState == PeerConnection.IceConnectionState.FAILED ) {
+                        events.onIceState(newState.name());
+                    }
 
                     if (newState == PeerConnection.IceConnectionState.CONNECTED) {
                         events.onIceConnected();

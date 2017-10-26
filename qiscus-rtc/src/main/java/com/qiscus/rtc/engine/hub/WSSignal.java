@@ -114,6 +114,26 @@ public class WSSignal implements HubSignal, WSChannel.WSChannelEvents {
     }
 
     @Override
+    public void notifyConnect() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                channel.notifyConnect();
+            }
+        });
+    }
+
+    @Override
+    public void notifyState(final String state, final String value) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                channel.notifyState(state, value);
+            }
+        });
+    }
+
+    @Override
     public void ping() {
         heartbeat = new Thread(new Runnable() {
             @Override

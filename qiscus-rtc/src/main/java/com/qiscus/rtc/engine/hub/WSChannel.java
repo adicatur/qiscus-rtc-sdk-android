@@ -33,7 +33,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class WSChannel {
     private static final String TAG = WSChannel.class.getSimpleName();
-    private static String SERVER = "wss://rtc.qiscus.com/signaling";
+    private static String SERVER = "ws://192.168.43.63:8080/mobile";
 
     private final LooperExecutor executor;
     private final WSChannelEvents event;
@@ -357,6 +357,61 @@ public class WSChannel {
         } catch (JSONException e) {
             Log.e(TAG, "Hub end call error: " + e.getMessage());
         }
+    }
+
+    public void notifyConnect() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (state != WSState.LOGGEDIN) {
+                    Log.e(TAG, "Hub notify connect in state " + state);
+                    return;
+                }
+
+                try {
+                    JSONObject object = new JSONObject();
+                    JSONObject data = new JSONObject();
+                    object.put("request", "room_notify");
+                    object.put("room", room_id);
+                    data.put("event", "notify_connect");
+                    object.put("data", data.toString());
+
+                    Log.d(TAG, "C->WSS: " + object.toString());
+
+                    websocket.send(object.toString());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hub notify connect error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void notifyState(final String st, final String v) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (state != WSState.LOGGEDIN) {
+                    Log.e(TAG, "Hub notify state in state " + state);
+                    return;
+                }
+
+                try {
+                    JSONObject object = new JSONObject();
+                    JSONObject data = new JSONObject();
+                    object.put("request", "room_notify");
+                    object.put("room", room_id);
+                    data.put("event", "notify_" + st);
+                    data.put("message", v);
+                    object.put("data", data.toString());
+
+                    Log.d(TAG, "C->WSS: " + object.toString());
+
+                    websocket.send(object.toString());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hub notify state error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     public void ping() {
