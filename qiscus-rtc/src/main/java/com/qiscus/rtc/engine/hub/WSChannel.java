@@ -33,7 +33,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class WSChannel {
     private static final String TAG = WSChannel.class.getSimpleName();
-    private static String SERVER = "wss://rtc.qiscus.com/signaling";
+    private static String SERVER = "wss://rtc.qiscus.com/signal";
 
     private final LooperExecutor executor;
     private final WSChannelEvents event;
