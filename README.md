@@ -1,11 +1,11 @@
 # Qiscus RTC SDK Android
 
-<p align="center"><br/><img src="https://github.com/qiscus/qiscus-rtc-sdk-android/blob/master/screenshoot/calling.png" width="37%" /><br/></p>
+[![Release](https://jitpack.io/v/qiscus/qiscus-rtc-sdk-android.svg)](https://jitpack.io/#qiscus/qiscus-rtc-sdk-android)
 
 Qiscus RTC SDK is a product that makes adding voice calling to mobile apps easy. It handles all the complexity of signaling and audio management while providing you the freedom to create a stunning user interface.
 On this example we use our simple websocket push notification for handle call notification. We highly recommend that you implement a better push notification for increasing call realiability, for example GCM, FCM, MQTT, or other standard messaging protocol.
 
-# Quick Start
+## Quick Start
 
 Below is a step-by-step guide on setting up the Qiscus RTC SDK for the first time
 
@@ -39,7 +39,7 @@ Add to your project AndroidManifest.xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
-# Authentication
+## Authentication
 
 ### Init Qiscus
 
@@ -53,10 +53,13 @@ public class SampleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        QiscusRTC.init(this);
+        QiscusRTC.init(this, app_id, app_secret);
     }
 }
 ```
+To get your `app_id` and `app_secret`, please [contact us](https://www.qiscus.com/contactus).
+
+## Method
 
 ### Register User
 
@@ -65,11 +68,10 @@ Before user can start call each other, they must register the user to our server
 Parameters:
 * username: String
 * displayName: String
-* avatar: String
+* avatarUrl: String
 
 ```java
-QiscusRTC.register(txtUsername.getText().toString(), txtUsername.getText().toString(), "http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg");
-QiscusRTC.setSession();
+QiscusRTC.register(username, displayName, avatarUrl);
 ```
 
 Start call object:
@@ -79,32 +81,32 @@ Start call object:
 * callerUsername: String
 * calleeUsername: String
 * callerDisplayName: String
-* calleeDisplayName: String
+* calleeAvatarUrl: String
 
 ### Start Call
 
-####Start voice call
+#### Start voice call
 
 ```java
-QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
+QiscusRTC.CallActivityBuilder.buildCallWith(roomId)
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VOICE)
                             .setCallerUsername(QiscusRTC.getUser())
-                            .setCalleeUsername(etTargetUsername.getText().toString())
-                            .setCalleeDisplayName(etTargetUsername.getText().toString())
-                            .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
+                            .setCalleeUsername(calleeUsername)
+                            .setCalleeDisplayName(calleeDisplayName)
+                            .setCalleeDisplayAvatar(calleeAvatarUrl)
                             .show(this);
 ```
-####Start video call
+#### Start video call
 
 ```java
-QiscusRTC.CallActivityBuilder.buildCallWith(etRoomId.getText().toString())
+QiscusRTC.CallActivityBuilder.buildCallWith(roomId)
                             .setCallAs(QiscusRTC.CallAs.CALLER)
                             .setCallType(QiscusRTC.CallType.VIDEO)
                             .setCallerUsername(QiscusRTC.getUser())
-                            .setCalleeUsername(etTargetUsername.getText().toString())
-                            .setCalleeDisplayName(etTargetUsername.getText().toString())
-                            .setCalleeDisplayAvatar("http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg")
+                            .setCalleeUsername(calleeUsername)
+                            .setCalleeDisplayName(calleeDisplayName)
+                            .setCalleeDisplayAvatar(calleeAvatarUrl)
                             .show(this);
 ```
 
