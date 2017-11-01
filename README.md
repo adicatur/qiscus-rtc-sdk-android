@@ -2,6 +2,8 @@
 
 [![Release](https://jitpack.io/v/qiscus/qiscus-rtc-sdk-android.svg)](https://jitpack.io/#qiscus/qiscus-rtc-sdk-android)
 
+<p align="center"><br/><img src="https://github.com/qiscus/qiscus-rtc-sdk-android/blob/master/screenshoot/calling.png" width="37%" /><br/></p>
+
 Qiscus RTC SDK is a product that makes adding voice calling to mobile apps easy. It handles all the complexity of signaling and audio management while providing you the freedom to create a stunning user interface.
 On this example we use our simple websocket push notification for handle call notification. We highly recommend that you implement a better push notification for increasing call realiability, for example GCM, FCM, MQTT, or other standard messaging protocol.
 
