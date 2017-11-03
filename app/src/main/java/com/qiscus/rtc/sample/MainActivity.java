@@ -10,11 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.qiscus.rtc.QiscusRTC;
-import com.qiscus.rtc.data.model.QiscusRTCCall;
 import com.qiscus.rtc.sample.service.WebsocketService;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         if (!QiscusRTC.hasSession()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -54,10 +58,25 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (serviceConnection != null) {
+            unbindService(serviceConnection);
+        }
+    }
+
+    public String generateRoomCall() {
+        String room = "callId" + String.valueOf(System.currentTimeMillis());
+        return room;
+    }
+
     private void initView() {
         etTargetUsername = (EditText) findViewById(R.id.target_username);
         etRoomId = (EditText) findViewById(R.id.room_id);
         btnVoiceCall = (Button) findViewById(R.id.btn_voice_call);
+        etRoomId.setText(generateRoomCall());
         btnVoiceCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
